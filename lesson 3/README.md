@@ -196,11 +196,14 @@ FROM student s1,
      student s2
 WHERE s1.surname=s2.surname
   AND
+```
+
 
 #### Внутреннее и внешнее объединение таблиц
 
 
 ![joins](./img/joins_.png)
+
 
 Кроме этого во многих СУБД существуют реализации операции внутреннего и внешнего условных соединений таблиц внутри одного запроса – INNER JOIN (внутреннее объединение), LEFT JOIN (полное левое объединение), RIGHT JOIN (полное правое объединение), OUTER JOIN (полное внешнее объединение).
 
@@ -266,5 +269,7 @@ Select s.*, sh.*
 FROM student s
 FULL OUTER JOIN student_hobby sh on s.id = sh.student_id;
 ```
+
+![full](https://www.w3schools.com/sql/img_fulljoin.gif)
 
 ![joins](./img/joins.png)
