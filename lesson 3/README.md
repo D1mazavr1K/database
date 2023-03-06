@@ -196,8 +196,8 @@ WHERE student.id= student_hobby.student_id;
 SELECT s1.*
 FROM student s1,
      student s2
-WHERE s1.surname=s2.surname
-  AND
+WHERE s1.surname = s2.surname
+  AND s1.id <> s2.id
 ```
 
 
