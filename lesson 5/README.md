@@ -12,6 +12,66 @@
 10. Создать обновляемое представление (для любой таблицы)
 
 
+## 4 и 6 запрос
+```sql
+-- Добавьте всем студентам, которые занимаются хотя бы одним хобби 0.01 балл
+-- вариант 1 с подзапросом
+UPDATE student
+SET score = score + 0.01 -- добавление
+WHERE id IN ( -- условие для обновления
+	SELECT distinct sh.student_id -- получение ID студентов, которые имеют активные хобби
+	FROM student_hobby sh
+	WHERE sh.date_finish IS NULL -- проверка на активное хобби
+				)
+-- вариант 2 с соединением таблиц (предпочтительнее)
+UPDATE student s
+SET score = score + 0.01
+FROM student_hobby sh -- соединяем таблицы
+WHERE s.id = sh.student_id AND 
+	sh.date_finish IS NULL -- проверка на активное хобби
+	
+select * from student order by score DESC -- выводим список студентов чтобы проверить что данные обновились
+
+-- У всех студентов, средний балл которых меньше 3.5 заменить все активные хобби на учебу
+INSERT INTO hobby (name, risk) VALUES ('Ucheba', 0) -- добавляем хобби "Учёба"
+
+-- вариант с подзапросом
+UPDATE student_hobby
+SET hobby_id = ( -- в подзапросе получаем ID хобби "Учёба"
+	SELECT id
+	FROM hobby
+	WHERE name = 'Ucheba'
+				)
+WHERE student_id IN ( -- условие для обновления
+	SELECT distinct id -- получаем в подзапросе ID студентов, с баллом меньше 3.5, имеющих активные хобби
+	FROM student
+	WHERE score < 3.5
+					)
+	AND date_finish IS NULL
+
+-- вариант с соединением таблиц
+UPDATE student_hobby sh
+SET hobby_id = ( -- в подзапросе получаем нужный ID
+	SELECT id
+	FROM hobby
+	WHERE name = 'Ucheba'
+				)
+FROM student s  -- условие для обновления написано при помощие соединения таблиц
+WHERE s.id = sh.student_id
+	AND s.score < 3.5
+	AND sh.date_finish IS NULL
+
+
+-- выводим данные чтобы проверить
+SELECT s.id, s.name, s.score, h.name, sh.date_finish
+from student s 
+	join student_hobby sh on s.id = sh.student_id
+	join hobby h on h.id = sh.hobby_id
+WHERE s.score < 3.5
+ORDER BY s.id
+```
+
+
 # View (представления)
 
 Идея представления (View) состоит в следующем: определить запрос, который предполагается использовать достаточно часто, 
