@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS public.product_group
 (
     id bigserial NOT NULL,
     name character varying(255) NOT NULL,
-    comment text NOT NULL,
+    comment text,
     PRIMARY KEY (id)
 );
 
